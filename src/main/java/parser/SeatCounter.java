@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class SeatCounter {
 
-    public static Map<String, String> getCookies() {
+    public static Map<String, String> createNewCookies() {
         Connection.Response res = null;
         try {
             res = Jsoup

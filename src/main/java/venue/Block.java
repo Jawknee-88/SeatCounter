@@ -8,8 +8,9 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.*;
 
-import static parser.SeatCounter.getCookies;
+import static parser.SeatCounter.createNewCookies;
 
 /**
  * Created by Michael on 31/10/2014.
@@ -21,6 +22,8 @@ public class Block {
     private Stand stand;
     private SegregatedArea segregationStatus;
     private SeatingOrStanding seatsOrTerrace;
+    private static final Object countLock = new Object();
+    volatile Integer blockCount = 0;
 
     public Block (Stand st, String name, SeatingOrStanding seatsOrStand, SegregatedArea homeOrAway) {
         blockName = name;
@@ -64,7 +67,7 @@ public class Block {
         }
 
         try {
-            doc = Jsoup.connect(baseUrl).cookies(getCookies()).get();
+            doc = Jsoup.connect(baseUrl).cookies(createNewCookies()).get();
             clickableBlocks = doc.select("#venueMap > div[onclick*=\"window.location='selectArea.asp?selectArea=true&eventID=\"]");
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,7 +99,7 @@ public class Block {
 
         org.jsoup.nodes.Document doc = null;
         try {
-            doc = Jsoup.connect(getBlockUrl()).cookies(getCookies()).get();
+            doc = Jsoup.connect(getBlockUrl()).cookies(createNewCookies()).get();
             occupiedSeats = doc.select("div[onclick*=\"Grey seats are sold and are not available to be purchased.\"]");
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -106,60 +109,108 @@ public class Block {
         return occupiedSeats.size();
     }
 
-    public int getStandingSoldTickets() {
-        ArrayList<Map<String, String>> allCookies = new ArrayList<Map<String, String>>();
-        int count = 0;
-
-
+    public String findOrderTicketURL() {
+        Document pricesPage = null;
+        String orderTicketURL = null;
 
         try {
-            //Get the link on the page to add ticket to basket. Don't need to worry about caching the
-            //cookies here.
-            Document pricesPage = Jsoup.connect(getBlockUrl()).cookies(getCookies()).timeout(10*1000).get();
-            Elements ticketLink = pricesPage.select("ul > table > tbody > tr > td > a");
-            String orderTicketURL = null;
+            pricesPage = Jsoup.connect(getBlockUrl()).cookies(createNewCookies()).timeout(10*10000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements ticketLink = pricesPage.select("ul > table > tbody > tr > td > a");
 
-            findOrderTicketLink:
-            for(Element el : ticketLink) {
-                if(el.text().contains("£")) {
-                    orderTicketURL = "https://www.venuetoolbox.com/barnetfc/ASP/" + el.attr("href");
-                    System.out.println(el.text());
-                    break findOrderTicketLink;
-                }
+        findOrderTicketLink:
+        for(Element el : ticketLink) {
+            if(el.text().contains("£")) {
+                orderTicketURL = "https://www.venuetoolbox.com/barnetfc/ASP/" + el.attr("href");
+                System.out.println(el.text());
+                break findOrderTicketLink;
             }
-
-
-            mainloop:
-            for(int i = 0; i<128; i++) {
-                Map<String, String> cookies = getCookies();
-                allCookies.add(cookies);
-                for(int c = 0; c<6; c++) {
-                    Elements h3 = null;
-                    org.jsoup.nodes.Document doc = null;
-
-                    doc = Jsoup.connect(orderTicketURL).cookies(cookies).timeout(10*1000).get();
-                    h3 = doc.select("h3");
-                    count++;
-                    System.out.println(count);
-
-                    if(h3.text().contains("Ticket No Longer Available")) {
-                        break mainloop;
-                    }
-                }
-
-            }
-
-            for(int m = 0; m<allCookies.size(); m++) {
-                Jsoup.connect("https://www.venuetoolbox.com/barnetfc/ASP/login.asp?doPublicClearBasket=true&homeArea=home").cookies(allCookies.get(m)).get();
-            }
-
-        } catch (IOException e1) {
-            e1.printStackTrace();
         }
 
-        System.out.println(getBlockName() + " Still available: " + (764-count) + " Tickets remaining: " + count);
+        return orderTicketURL;
+    }
 
-        return count;
+    /**
+     * Terrace capacity believed to be 865 based on counting total available in the away end far in advance i.e. they
+     * wouldn't have sold any.
+     *
+     * @return number of sold tickets
+     */
+    public int getStandingSoldTickets() {
+        ArrayList<Map<String, String>> allCookies = new ArrayList<Map<String, String>>();
+
+        try {
+            final String orderTicketURL = findOrderTicketURL();
+            ExecutorService execs = Executors.newFixedThreadPool(10);
+
+            for (int i = 0; i < 300; i++) {
+                Map<String, String> cookies = createNewCookies();
+                allCookies.add(cookies);
+
+                Future f = execs.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        reserveMaximumTicketsForOneUser(orderTicketURL, cookies);
+                    }
+                });
+            }
+
+            execs.shutdown();
+            execs.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            //teardownCookies(allCookies);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(getBlockName() + " Sold: " + (764 - blockCount) + " Tickets remaining: " + blockCount);
+
+        return blockCount;
+    }
+
+    public void teardownCookies(ArrayList<Map<String, String>> allCookies) throws IOException {
+        for(int m = 0; m<allCookies.size(); m++) {
+            Jsoup.connect("https://www.venuetoolbox.com/barnetfc/ASP/login.asp?doPublicClearBasket=true&homeArea=home").cookies(allCookies.get(m)).get();
+        }
+    }
+
+    /**
+     * Uses one
+     * @return number of tickets that the user has been allowed to reserve
+     */
+    public void reserveMaximumTicketsForOneUser(String ticketURL, Map<String, String> cookies) {
+        int userCount = 0;
+        boolean exceededOnlineOrderingLimit = false;
+        System.out.println("Started");
+
+        do {
+            Elements h3 = null;
+            org.jsoup.nodes.Document doc = null;
+
+            try {
+                doc = Jsoup.connect(ticketURL).cookies(cookies).timeout(10 * 10000).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            h3 = doc.select("h3");
+
+            if (h3.text().contains("Online Ordering Limit")) {
+                userCount++;
+                exceededOnlineOrderingLimit = true;
+            } else if(h3.text().contains(("Ticket No Longer Available"))) {
+                if(h3.text().contains(("Ticket No Longer Available"))) {
+                    System.out.println("Ticket No Longer Available" + " - Reserved: " + userCount);
+                }
+                exceededOnlineOrderingLimit = true;
+            } else {
+                userCount++;
+            }
+        } while (!exceededOnlineOrderingLimit);
+
+        blockCount = blockCount + userCount;
+        System.out.println("User reserved: " + userCount);
     }
 
     public int getBlockAvailableSeats() {
@@ -167,7 +218,7 @@ public class Block {
 
         org.jsoup.nodes.Document doc = null;
         try {
-            doc = Jsoup.connect(getBlockUrl()).cookies(getCookies()).get();
+            doc = Jsoup.connect(getBlockUrl()).cookies(createNewCookies()).get();
             availableSeats = doc.select("div[onclick*=\"window.location='selectArea.asp?selectArea=true&eventID=\"]");
         } catch (IOException e1) {
             e1.printStackTrace();

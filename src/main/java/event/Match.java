@@ -16,8 +16,8 @@ import java.util.Date;
 public class Match {
 
     private Stadium stadium = null;
-    private String eventPageHome = "https://www.venuetoolbox.com/barnetfc/ASP/selectArea.asp?bookEvent=true&eventID={BFB0F7D2-B5D3-4329-A537-B91F79468A57}&packageID=&homeArea=home";
-    private String eventPageAway = "https://www.venuetoolbox.com/barnetfc/ASP/selectArea.asp?bookEvent=true&eventID={BFB0F7D2-B5D3-4329-A537-B91F79468A57}&packageID={6F9619FF-8B86-D011-B42D-00C04FC964FF}&homeArea=away";
+    private String eventPageHome = "https://www.venuetoolbox.com/barnetfc/ASP/selectArea.asp?bookEvent=true&eventID={229EB7C2-8385-4579-8B8B-1779CEB457A1}&homeArea=home";
+    private String eventPageAway = "https://www.venuetoolbox.com/barnetfc/ASP/selectArea.asp?bookEvent=true&eventID={7B8E5B4A-B0F4-4DA1-8B2A-CE3F8D53F71A}&homeArea=away";
 
     public Stadium getStadium() {
         if(stadium == null) {
