@@ -59,6 +59,6 @@ public class SeatCounter {
 
     public static void main(String args[]) {
         System.out.println(getNumberOfOccupiedSeats());
-        //System.out.println(getNumberOfAvailableSeats());
+        System.out.println(getNumberOfAvailableSeats());
     }
 }

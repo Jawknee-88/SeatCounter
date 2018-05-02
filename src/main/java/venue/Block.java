@@ -146,7 +146,7 @@ public class Block {
             ExecutorService execs = Executors.newFixedThreadPool(10);
 
             for (int i = 0; i < 300; i++) {
-                Map<String, String> cookies = createNewCookies();
+                final Map<String, String> cookies = createNewCookies();
                 allCookies.add(cookies);
 
                 Future f = execs.submit(new Runnable() {
@@ -165,7 +165,7 @@ public class Block {
             e.printStackTrace();
         }
 
-        System.out.println(getBlockName() + " Sold: " + (764 - blockCount) + " Tickets remaining: " + blockCount);
+        System.out.println(getBlockName() + " Sold: " + (865 - blockCount) + " Tickets remaining: " + blockCount);
 
         return blockCount;
     }

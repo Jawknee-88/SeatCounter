@@ -73,9 +73,9 @@ public class Stadium {
      * lead to NPE.
      */
     public void setupStands() {
-        //stands.put("North", new Stand(this, Stand.StandCompassOrientation.NORTH));
+        stands.put("North", new Stand(this, Stand.StandCompassOrientation.NORTH));
         //stands.put("South", new Stand(this, Stand.StandCompassOrientation.SOUTH));
-        stands.put("East", new Stand(this, Stand.StandCompassOrientation.EAST));
-        stands.put("West", new Stand(this, Stand.StandCompassOrientation.WEST));
+        //stands.put("East", new Stand(this, Stand.StandCompassOrientation.EAST));
+        //stands.put("West", new Stand(this, Stand.StandCompassOrientation.WEST));
     }
 }
