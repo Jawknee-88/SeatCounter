@@ -89,9 +89,11 @@ public class Stand {
     public void setStandBlocks() {
         switch (getStandName()) {
             case "North Stand":
-                Block[] northBlocks = {new Block(this, "North Stand A", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
-                        new Block(this, "North Stand B", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME), new Block(this, "North Stand C", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
-                        new Block(this, "North Stand D", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME), new Block(this, "North Stand E", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME)};
+                Block[] northBlocks = {new Block(this, "Stand Sixty-Six A", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Stand Sixty-Six B", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Stand Sixty-Six C", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Stand Sixty-Six D", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Stand Sixty-Six E", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME)};
                 standBlocks.put(getStandName(), northBlocks);
                 break;
             case "South Terrace":
@@ -99,18 +101,24 @@ public class Stand {
                 standBlocks.put(getStandName(), southBlocks);
                 break;
             case "East":
-                Block[] eastBlocks = {new Block(this, "East Stand A", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
-                        new Block(this, "East Stand B", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME), new Block(this, "East Stand C", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
-                        new Block(this, "East Stand D", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME), new Block(this, "East Stand E", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
-                        new Block(this, "East Stand F", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME), new Block(this, "East G UNCOVER", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
-                        new Block(this, "East Stand H (UNCOVERED SEATS)", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME)};
+                Block[] eastBlocks = {new Block(this, "Bumble Family Zone A", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "The Hive Stand B", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Bumble Family Zone C", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Bumble Family Zone D", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Bumble Family Zone E", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Bumble Family Zone F", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Bumble Family Zone G", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Bumble Family Zone H", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME)};
                 standBlocks.put(getStandName(), eastBlocks);
                 break;
             case "West":
-                Block[] westBlocks = {new Block(this, "West Stand A", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME), new Block(this, "West Stand B", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
-                        new Block(this, "West Stand C", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME), new Block(this, "West Stand D", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
-                        new Block(this, "West Stand E Home", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME), new Block(this, "West Stand F", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
-                        new Block(this, "West Stand G", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME)};
+                Block[] westBlocks = {new Block(this, "Legends A", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Legends B", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Legends C", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Legends D", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Legends E", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Legends F", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "Legends G", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME)};
                 standBlocks.put(getStandName(), westBlocks);
                 break;
         }
