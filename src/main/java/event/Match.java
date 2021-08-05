@@ -16,8 +16,8 @@ import java.util.Date;
 public class Match {
 
     private Stadium stadium = null;
-    private String eventPageHome = "https://bfc.venuetoolbox.com/VenueManagement/asp/selectArea.asp?bookEvent=true&eventID={325E222F-13AE-4019-A50F-66F647FBD17B}&packageID={6F9619FF-8B86-D011-B42D-00C04FC964FF}&homeArea=home";
-    private String eventPageAway = "https://bfc.venuetoolbox.com/VenueManagement/asp/selectArea.asp?bookEvent=true&eventID={325E222F-13AE-4019-A50F-66F647FBD17B}&packageID={6F9619FF-8B86-D011-B42D-00C04FC964FF}&homeArea=home";
+    private String eventPageHome = "https://www.venuetoolbox.com/barnetfc/asp/selectArea.asp?bookEvent=true&eventID={536163DC-11E1-42AB-A679-D481C5B325DD}&packageID={6F9619FF-8B86-D011-B42D-00C04FC964FF}&homeArea=home";
+    private String eventPageAway = "https://www.venuetoolbox.com/barnetfc/asp/selectArea.asp?bookEvent=true&eventID={536163DC-11E1-42AB-A679-D481C5B325DD}&packageID={6F9619FF-8B86-D011-B42D-00C04FC964FF}&homeArea=home";
 
     public Stadium getStadium() {
         if(stadium == null) {

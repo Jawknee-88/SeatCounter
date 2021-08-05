@@ -24,6 +24,7 @@ public class Block {
     private SeatingOrStanding seatsOrTerrace;
     private static final Object countLock = new Object();
     volatile Integer blockCount = 0;
+    static public final String WITH_DELIMITER = "((?<=%1$s)|(?=%1$s))";
 
     public Block (Stand st, String name, SeatingOrStanding seatsOrStand, SegregatedArea homeOrAway) {
         blockName = name;
@@ -68,7 +69,7 @@ public class Block {
 
         try {
             doc = Jsoup.connect(baseUrl).cookies(createNewCookies()).get();
-            clickableBlocks = doc.select("#venueMap > div[onclick*=\"window.location='selectArea.asp?selectArea=true&eventID=\"]");
+            clickableBlocks = doc.select("#venueMap > div");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,7 +77,8 @@ public class Block {
         for(Element e : clickableBlocks) {
             if(e.text().equals(blockName)) {
                 String str = e.attr("onclick");
-                str = str.substring(17, str.length()-2);
+                str = str.split(String.format(WITH_DELIMITER, "selectArea"), 2)[1];
+                str = str.substring(0, str.length()-3);
                 blockURL = blockURL + str;
                 break;
             }
@@ -100,7 +102,7 @@ public class Block {
         org.jsoup.nodes.Document doc = null;
         try {
             doc = Jsoup.connect(getBlockUrl()).cookies(createNewCookies()).get();
-            occupiedSeats = doc.select("div[onclick*=\"Grey seats are sold and are not available to be purchased.\"]");
+            occupiedSeats = doc.select("div[onclick*=alert('Grey seats are not available to be purchased.');]");
         } catch (IOException e1) {
             e1.printStackTrace();
         }

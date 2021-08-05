@@ -21,7 +21,7 @@ public class SeatCounter {
         Connection.Response res = null;
         try {
             res = Jsoup
-                    .connect("https://www.venuetoolbox.com/barnetfc/ASP/login.asp?nonMember=true&eventID={7E8FAFC5-E637-40EE-8D11-F66223AFBD91}")
+                    .connect("https://www.venuetoolbox.com/barnetfc/asp/bookTickets.asp")
                     .timeout(10*1000)
                     .method(Connection.Method.POST)
                     .execute();
@@ -58,7 +58,7 @@ public class SeatCounter {
     }
 
     public static void main(String args[]) {
-        //System.out.println(getNumberOfOccupiedSeats());
-        System.out.println(getNumberOfAvailableSeats());
+        System.out.println(getNumberOfOccupiedSeats());
+        //System.out.println(getNumberOfAvailableSeats());
     }
 }

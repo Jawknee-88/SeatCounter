@@ -101,9 +101,9 @@ public class Stand {
                 standBlocks.put(getStandName(), southBlocks);
                 break;
             case "East":
-                Block[] eastBlocks = {new Block(this, "Bumble Family Zone A", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                Block[] eastBlocks = {new Block(this, "The Hive Stand A", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
                         new Block(this, "The Hive Stand B", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
-                        new Block(this, "Bumble Family Zone C", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
+                        new Block(this, "The Hive Stand C", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
                         new Block(this, "Bumble Family Zone D", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
                         new Block(this, "Bumble Family Zone E", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
                         new Block(this, "Bumble Family Zone F", Block.SeatingOrStanding.SEATING, Block.SegregatedArea.HOME),
