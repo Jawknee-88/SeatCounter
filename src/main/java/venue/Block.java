@@ -221,7 +221,7 @@ public class Block {
         org.jsoup.nodes.Document doc = null;
         try {
             doc = Jsoup.connect(getBlockUrl()).cookies(createNewCookies()).get();
-            availableSeats = doc.select("div[onclick*=\"window.location='selectArea.asp?selectArea=true&eventID=\"]");
+            availableSeats = doc.select("div[onclick*=\"pageLoadWithDuplicationCheck('a seat', 'selectArea.asp?\"]");
         } catch (IOException e1) {
             e1.printStackTrace();
         }
